@@ -1,21 +1,49 @@
-import React, { useState } from 'react';
-import EmailList from '../components/EmailList';
-import EmailView from '../components/EmailView';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const Inbox = () => {
-  const [selectedEmail, setSelectedEmail] = useState(null);
+const Emails = () => {
+  const [emails, setEmails] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const emails = [
-    { id: 1, subject: 'Welcome', message: 'Hello and welcome!' },
-    { id: 2, subject: 'React Project', message: 'Remember to practice React!' },
-  ];
+  useEffect(() => {
+    const fetchEmails = async () => {
+      try {
+        console.log('API URL:', process.env.REACT_APP_API_URL);  
+
+        const token = localStorage.getItem('jwtToken');
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/emails/inbox`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setEmails(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching emails:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchEmails();
+  }, []);
+
+  if (loading) return <p>Loading emails...</p>;
 
   return (
-    <div className="inbox">
-      <EmailList emails={emails} onEmailClick={(email) => setSelectedEmail(email)} />
-      {selectedEmail && <EmailView email={selectedEmail} />}
+    <div>
+      <ul>
+        {emails.map(email => (
+          <li key={email._id}>
+            <p><strong>From:</strong> {email.from}</p>
+            <p><strong>Subject:</strong> {email.subject}</p>
+            <p><strong>Message:</strong> {email.message}</p>
+            <hr />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 };
 
-export default Inbox;
+export default Emails;

@@ -1,31 +1,47 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Sidebar from './components/Sidebar';
-import ComposeEmail from './components/ComposeEmail';
-import Inbox from './pages/Inbox';
-import Sent from './pages/Sent';
-import Trash from './pages/Trash';
+import React, { useState } from 'react';
 import Login from './pages/Login';
-import Register from './pages/Register';
+import PasswordPage from './pages/PasswordPage';
+import EmailService from './pages/EmailService';
+import ForgotEmailPage from './pages/ForgotEmailPage';
+import ForgotEmailDetailsPage from './pages/ForgotEmailDetailsPage';
 
 const App = () => {
+  const [step, setStep] = useState(1);
+  const [email, setEmail] = useState('');
+
+ 
+  const validEmail = 'Testuser@gmail.com';
+  const validPassword = 'User@123';
+
+  const handleNext = (data, nextStep) => {
+    if (step === 1) {
+      if (data === validEmail) {
+        setEmail(data);
+        setStep(nextStep);
+      } else {
+        alert('Invalid email address!');
+      }
+    } else if (step === 2) {
+  
+      if (data === validPassword) {
+        setStep(nextStep);
+      } else {
+        alert('Invalid password!');
+      }
+    } else {
+
+      setStep(nextStep);
+    }
+  };
+
   return (
-    <Router>
-      <div className="app">
-        <Sidebar />
-        <div className="main-content">
-          <Routes>
-            <Route path="/inbox" element={<Inbox />} />
-            <Route path="/sent" element={<Sent />} />
-            <Route path="/trash" element={<Trash />} />
-            <Route path="/compose" element={<ComposeEmail />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/" element={<Login />} /> 
-          </Routes>
-        </div>
-      </div>
-    </Router>
+    <div>
+      {step === 1 && <Login onNext={(data) => handleNext(data, 2)} />}
+      {step === 2 && <PasswordPage email={email} onNext={(data) => handleNext(data, 3)} />}
+      {step === 3 && <EmailService />}
+      {step === 4 && <ForgotEmailPage onNext={(data) => handleNext(data, 5)} />}
+      {step === 5 && <ForgotEmailDetailsPage onNext={(data) => handleNext(data, 6)} />}
+    </div>
   );
 };
 

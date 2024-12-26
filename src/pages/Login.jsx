@@ -1,42 +1,46 @@
-import React from 'react';
-import { Formik, Form, Field } from 'formik';
-import { useDispatch } from 'react-redux';
-import { login } from '../store/actions/authActions';
+import React, { useState } from 'react';
 
-const Login = () => {
-  const dispatch = useDispatch();
+const LoginPage = ({ onNext }) => {
+  const [email, setEmail] = useState('');
 
-  const handleSubmit = async (values, { setSubmitting, setErrors }) => {
-    try {
-      await dispatch(login(values)); 
-      alert('Login successful');
-    } catch (error) {
-      setErrors({ server: error.response?.data?.message || 'Login failed' });
-    } finally {
-      setSubmitting(false);
+  const handleNext = () => {
+    if (email) {
+      onNext(email);
+    } else {
+      alert('Please enter your email!');
     }
   };
 
   return (
-    <div className="login">
-      <h2>Login</h2>
-      <Formik
-        initialValues={{ email: '', password: '' }}
-        onSubmit={handleSubmit}
-      >
-        {({ isSubmitting, errors }) => (
-          <Form>
-            <Field name="email" placeholder="Email" />
-            <Field name="password" placeholder="Password" type="password" />
-            {errors.server && <div>{errors.server}</div>}
-            <button type="submit" disabled={isSubmitting}>
-              Login
-            </button>
-          </Form>
-        )}
-      </Formik>
+    <div className="login-container">
+      <div className="login-box">
+        <img src="/Google1.jpg" alt="Google Logo" className="logo-image" /> {/* Add this line */}
+        <h2 className="title">Sign in</h2>
+        <p className="subtitle">to continue to Gmail</p>
+        <input
+          type="email"
+          placeholder="Email Id"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="input-field"
+        />
+        <div className="login-links">
+          <a href="#" className="link">
+            Forgot email?
+          </a>
+        </div>
+        <p className="test-email">Test email Id: Testuser@gmail.com</p>
+        <div className="login-footer">
+          <a href="#" className="link">
+            Create account
+          </a>
+          <button className="btn" onClick={handleNext}>
+            Next
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default Login;
+export default LoginPage;

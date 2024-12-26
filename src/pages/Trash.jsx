@@ -5,15 +5,31 @@ import EmailView from '../components/EmailView';
 const Trash = () => {
   const [selectedEmail, setSelectedEmail] = useState(null);
 
-  const trashEmails = [
-    { id: 1, subject: 'Old Newsletter', message: 'This is an old newsletter.' },
-    { id: 2, subject: 'Spam Email', message: 'This email has been marked as spam.' },
+  const trashedEmails = [
+    { id: 1, subject: 'Old Reminder', message: 'This is an old email that was deleted.' },
+    { id: 2, subject: 'Spam Message', message: 'This email was marked as spam and moved to trash.' },
   ];
 
   return (
-    <div className="trash">
-      <EmailList emails={trashEmails} onEmailClick={(email) => setSelectedEmail(email)} />
-      {selectedEmail && <EmailView email={selectedEmail} />}
+    <div className="container">
+      <div className="email-list">
+        <h2>Trash</h2>
+        {trashedEmails.map((email) => (
+          <div
+            key={email.id}
+            onClick={() => setSelectedEmail(email)}
+            style={{ cursor: 'pointer' }}
+          >
+            <h4>{email.subject}</h4>
+            <p>{email.message.substring(0, 50)}...</p>
+          </div>
+        ))}
+      </div>
+      {selectedEmail && (
+        <div className="email-view">
+          <EmailView email={selectedEmail} />
+        </div>
+      )}
     </div>
   );
 };
