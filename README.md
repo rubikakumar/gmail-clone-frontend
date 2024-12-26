@@ -48,4 +48,3 @@ npm start
 - **Routing**: Implemented React Router to handle navigation between pages like Inbox, Sent, and Login.
 - **State Management**: Used React hooks like useState and useEffect to manage state for email data, login credentials, etc.
 - **API Integration**: Implemented api.js to send POST requests with FormData for email submissions.
-
