@@ -40,6 +40,12 @@ npm install
 
 npm start
 
+## Netlify Deployment
+
+The project is deployed on Netlify and can be accessed via the following URL:
+
+https://cosmic-zabaione-09f8b1.netlify.app/
+
 ## Development Process
 
 - **Initial Setup**: Set up React project using create-react-app.
